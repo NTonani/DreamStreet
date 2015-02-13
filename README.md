@@ -1,3 +1,3 @@
-# DreamStreetEWUCSCD349
+# Dream Street
 
-Class project for EWU CSCD students in Design Patters (349)
+Authors: Nathan Tonani, Leland Burlingame, and Chris Hatch
