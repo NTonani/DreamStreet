@@ -15,9 +15,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 public class TileMap {
-	
 
-	
 	private ArrayList<Rectangle> tiles;
 	private ArrayList<Image> tileImg;
 	private int mapSize;
