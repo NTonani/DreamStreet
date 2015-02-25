@@ -87,13 +87,13 @@ public class TileMap {
 		for(int i =0;i<mapSize;i++) {
 			// only draws the tile if its in the bounds of the screen
 			if (tiles.get(i).x*scale-xOffSet > 0 - tiles.get(i).height*scale  &&  tiles.get(i).x*scale-xOffSet < Game.WIDTH*scale
-			&& tiles.get(i).y*scale-yOffSet > 0 - tiles.get(i).width*scale && tiles.get(i).y*scale-yOffSet < Game.HEIGHT * scale)
+			&& tiles.get(i).y*scale-yOffSet > (0 - tiles.get(i).width*scale*1.1) && tiles.get(i).y*scale-yOffSet <  (Game.HEIGHT * scale *1.1))
 			{
 				g.drawImage(tileImg.get(i),tiles.get(i).x*scale-xOffSet,tiles.get(i).y*scale-yOffSet,tiles.get(i).height*scale,tiles.get(i).width*scale,null);
 			}
 
 		}
 	}
-	
-	
+
+
 }

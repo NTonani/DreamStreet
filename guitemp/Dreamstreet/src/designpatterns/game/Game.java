@@ -1,9 +1,6 @@
 package designpatterns.game;
 
-import java.awt.BorderLayout;
-import java.awt.Canvas;
-import java.awt.Dimension;
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
@@ -16,13 +13,23 @@ import designpatterns.gfx.Sprite;
 import designpatterns.gfx.SpriteSheet;
 import designpatterns.gfx.TileMap;
 
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+
 public class Game extends Canvas implements Runnable{
 
 	private static final long serialVersionUID = 1L;
-	public static final int WIDTH = 480;
+	public static final int WIDTH = 640;
+	//public static final int WIDTH = 480;
 	public static final int HEIGHT = WIDTH / 16 * 9;
 	public static final int SCALE = 3;
 	public static final String NAME = "Dream Street";
+	int fps = 0;
+
+	//String bip = "/res/audio/d2cave.mp3";
+	//Media hit = new Media(bip);
+	//MediaPlayer mediaPlayer = new MediaPlayer(hit);
+
 
 	private boolean running = false;
 	private JFrame frame;
@@ -32,9 +39,9 @@ public class Game extends Canvas implements Runnable{
 	
 	//spritesheets for map and character
 	private SpriteSheet spritesheet = new SpriteSheet("/bear_sheet.png");
-	private SpriteSheet lightsheet = new SpriteSheet("/lighttest3.png");
+	private SpriteSheet lightsheet = new SpriteSheet("/lighttest.png");
 	private SpriteSheet mapsheet = new SpriteSheet("/tile_sheet3.png");
-	
+
 	//character image and sprite
 	//private BufferedImage lightobj = lightsheet.getSprite(0,0,600,400);
 	//private BufferedImage lightobj = lightsheet.getSprite(0,0,66,36);
@@ -43,7 +50,8 @@ public class Game extends Canvas implements Runnable{
 	private BufferedImage spritechar = spritesheet.getSprite(0,0,32,32);
 
 	private Sprite character = new Sprite(spritechar, WIDTH*SCALE/2-30, HEIGHT*SCALE/2 - 80);
-	private Lighting lightradius = new Lighting(lightobj, character.getX()-980,character.getY()-550);
+	private Lighting lightradius = new Lighting(lightobj);
+	//private Lighting lightradius = new Lighting(lightobj, character.getX()-980,character.getY()-550);
 	//map
 	private TileMap map = new TileMap("res/temp_map.txt",mapsheet);	
 	
@@ -57,12 +65,14 @@ public class Game extends Canvas implements Runnable{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new BorderLayout());
 		frame.add(this,BorderLayout.CENTER);
+	//	frame.setUndecorated(true); //makes borderless window
 		frame.pack();
-		
+
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
-		
+		//mediaPlayer.play();
+
 		addKeyListener(new KeyAdapter(){
 			@Override
 			public void keyPressed(KeyEvent e){
@@ -177,12 +187,19 @@ public class Game extends Canvas implements Runnable{
 			if(System.currentTimeMillis()-lastTimer >= 1000){
 				lastTimer+=1000;
 				System.out.println(frames+", "+ticks);
+				fps = frames;
 				frames = 0;
 				ticks =0;
 				
 			}
 		}
 		
+	}
+
+	public void drawDiagnostic(Graphics g) {
+		g.setColor(Color.WHITE);
+		g.setFont(new Font("TimesRoman", Font.PLAIN, 25));
+		g.drawString(fps + " ", 20, 40);
 	}
 	
 	public void tick(){
@@ -205,11 +222,11 @@ public class Game extends Canvas implements Runnable{
 		}
 		Graphics g = bs.getDrawGraphics();
 
-		
 		map.draw(g,SCALE);
 		character.draw(g,SCALE);
 		lightradius.draw(g,30);
-		
+		drawDiagnostic(g);
+
 		g.dispose();
 		bs.show();
 	}
