@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="exploded-ear" name="Dreamstreet:ear exploded">
-    <output-path>$PROJECT_DIR$/out/artifacts/Dreamstreet_ear_exploded</output-path>
-    <root id="root">
-      <element id="javaee-facet-resources" facet="Dreamstreet/javaeeApplication/javaEEApplication" />
-    </root>
-  </artifact>
-</component>

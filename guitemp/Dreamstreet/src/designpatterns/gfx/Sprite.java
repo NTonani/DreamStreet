@@ -1,7 +1,6 @@
 package designpatterns.gfx;
 
-import java.awt.Graphics;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Sprite {
@@ -25,6 +24,8 @@ public class Sprite {
 	
 	public void draw(Graphics g, int scale){
 		g.drawImage(img, this.x, this.y,32*scale,32*scale, null);
+		g.setColor(Color.white);
+		g.fillRect(this.x+45, this.y+20, 10, 10);
 	}
 	
 	public void navigate(int nav, int scale){

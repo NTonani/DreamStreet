@@ -25,9 +25,6 @@ public class TileMap {
 	public int xOffSet = 0;
 	public int yOffSet = 0;
 
-	public int dx = 0;
-	public int dy = 0;
-
 
 	public TileMap(String path, SpriteSheet map){
 		

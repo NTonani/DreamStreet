@@ -5,19 +5,16 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-import java.io.File;
+import java.util.Random;
 
 import javax.swing.JFrame;
 
-import designpatterns.gfx.Lighting;
-import designpatterns.gfx.Sprite;
-import designpatterns.gfx.SpriteSheet;
-import designpatterns.gfx.TileMap;
+import designpatterns.gfx.*;
 
 public class Game extends Canvas implements Runnable{
 
 	private static final long serialVersionUID = 1L;
-	public static final int WIDTH = 640;
+	public static final int WIDTH = 640;  // 1920x1080
 	//public static final int WIDTH = 480;
 	public static final int HEIGHT = WIDTH / 16 * 9;
 	public static final int SCALE = 3;
@@ -31,21 +28,31 @@ public class Game extends Canvas implements Runnable{
 	
 	//spritesheets for map and character
 	private SpriteSheet spritesheet = new SpriteSheet("/bear_sheet.png");
-	private SpriteSheet lightsheet = new SpriteSheet("/lighttest.png");
+    private SpriteSheet monstersheet = new SpriteSheet("/monsters/skulltula.png");
+    private SpriteSheet lightsheet = new SpriteSheet("/lighttest.png");
 	private SpriteSheet mapsheet = new SpriteSheet("/tile_sheet2.png");
 
 	//character image and sprite
 	private BufferedImage lightobj = lightsheet.getSprite(0,0,66,36);
 
 	private BufferedImage spritechar = spritesheet.getSprite(0,0,32,32);
+    private BufferedImage monsterchar = monstersheet.getSprite(0,0,32,32);
+
+    // this will be moved to a specific player class
+	public int dx = 0;
+	public int dy = 0;
 
 	private Sprite character = new Sprite(spritechar, WIDTH*SCALE/2-30, HEIGHT*SCALE/2 - 80);
-	private Lighting lightradius = new Lighting(lightobj);
-	//private Lighting lightradius = new Lighting(lightobj, character.getX()-980,character.getY()-550);
+    private Sprite monster = new Sprite(monsterchar, 2000,2000);
+
+    private Lighting lightradius = new Lighting(lightobj);  // use if width is 640
+	//private Lighting lightradius = new Lighting(lightobj, character.getX()-980,character.getY()-530); // use this if running on 480 width
 
 	//map
-	private TileMap map = new TileMap("res/temp_map.txt",mapsheet);
+	private TileMap map = new TileMap("res/raymaptest.txt",mapsheet);
 
+
+	private RayShadow[] rays = new RayShadow[20];
 	int fps = 0;
 
 	public Game() {
@@ -58,51 +65,58 @@ public class Game extends Canvas implements Runnable{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new BorderLayout());
 		frame.add(this,BorderLayout.CENTER);
-	//	frame.setUndecorated(true); //makes borderless window
+		frame.setUndecorated(true); //makes borderless window
 		frame.pack();
 
-		frame.setResizable(false);
+		//frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
+
+
+		Random rand = new Random();
+		for (int i = 0; i < rays.length; i++) {
+			rays[i] = new RayShadow(new Rectangle(rand.nextInt(2000), rand.nextInt(2000), rand.nextInt(200), rand.nextInt(200)), WIDTH*SCALE);
+		}
 
 		addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_W) {
-					map.dy = -5;
+					dy = -5;
 				}
 				if (e.getKeyCode() == KeyEvent.VK_S) {
-					map.dy = 5;
+					dy = 5;
 				}
+
 				if (e.getKeyCode() == KeyEvent.VK_A) {
-					map.dx = -5;
+					dx = -5;
 				}
 				if (e.getKeyCode() == KeyEvent.VK_D) {
-					map.dx = 5;
+					dx = 5;
 				}
 			}
 
 			public void keyReleased(KeyEvent e) {
 
 				if (e.getKeyCode() == KeyEvent.VK_W) {
-					if (map.dy == -5) {
-						map.dy = 0;
+					if (dy == -5) {
+						dy = 0;
 					}
 				}
 				if (e.getKeyCode() == KeyEvent.VK_S) {
-					if (map.dy == 5) {
-						map.dy = 0;
+					if (dy == 5) {
+						dy = 0;
 					}
 				}
 
 				if (e.getKeyCode() == KeyEvent.VK_A) {
-					if (map.dx == -5) {
-						map.dx = 0;
+					if (dx == -5) {
+						dx = 0;
 					}
 				}
 				if (e.getKeyCode() == KeyEvent.VK_D) {
-					if (map.dx == 5) {
-						map.dx = 0;
+					if (dx == 5) {
+						dx = 0;
 					}
 				}
 			}
@@ -141,7 +155,7 @@ public class Game extends Canvas implements Runnable{
 			long now = System.nanoTime();
 			delta += (now-lastTime)/nsPerTick;
 			lastTime = now;
-			boolean shouldRender = true;
+			boolean shouldRender = false; // false here limits to 60 fps
 			
 			while(delta>=1){
 				ticks++;
@@ -170,17 +184,19 @@ public class Game extends Canvas implements Runnable{
 		}
 		
 	}
-
-	public void drawDiagnostic(Graphics g) {
-		g.setColor(Color.WHITE);
-		g.setFont(new Font("TimesRoman", Font.PLAIN, 25));
-
-		g.drawString(fps + " ", 20, 40);
-	}
 	
 	public void tick(){
-		map.xOffSet += map.dx;
-		map.yOffSet += map.dy;
+		map.xOffSet += dx;
+		map.yOffSet += dy;
+        monster.setX(monster.getX()-dx);
+        monster.setY(monster.getY()-dy);
+	/*	for (int i = 0 ; i < rays.length; i++) {
+			rays[i].obstacle.x -= dx;
+			rays[i].obstacle.y -= dy;
+			rays[i].tick(character.getX()+50,character.getY()+25);
+		}*/
+
+
 		/*
 		 * 
 		 * 
@@ -200,13 +216,25 @@ public class Game extends Canvas implements Runnable{
 
 		map.draw(g,SCALE);
 		character.draw(g,SCALE);
+	    monster.draw(g,SCALE*2);
 		lightradius.draw(g,30);
+
+		/*for (int i = 0; i < rays.length; i++) {
+			rays[i].draw(g);
+		}*/
 		drawDiagnostic(g);
 
 		g.dispose();
 		bs.show();
 	}
-	
+
+	public void drawDiagnostic(Graphics g) {
+		g.setColor(Color.WHITE);
+		g.setFont(new Font("TimesRoman", Font.PLAIN, 25));
+
+		g.drawString(fps + " ", 20, 40);
+	}
+
 	public static void main(String[] args){
 		Game game = new Game();
 		game.start();
