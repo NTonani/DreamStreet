@@ -151,23 +151,23 @@ public class RayShadow {
     }
 
     public void draw(Graphics g) {
-        g.setColor(Color.white);
+        g.setColor(Color.black);
         g.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
         //g.setColor(Color.RED);
         g.setColor(Color.black);
-     //   g.fillPolygon(xpoints, ypoints, xpoints.length);
+        g.fillPolygon(xpoints, ypoints, xpoints.length);
 
         g.setColor(Color.WHITE);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 25));
 
         for (int i= 0; i < xpoints.length; i++) {
 
-            g.fillRect(xpoints[i], ypoints[i], 2,2);
+       //     g.fillRect(xpoints[i], ypoints[i], 2,2);
         }
         for (int i = 0; i < corners.length; i++) {
            // g.drawRect(corners[i].x + 10, corners[i].y + findY(corners[i].slope, 10),3,3);
             //g.drawRect(corners[i].x - 10, corners[i].y + findY(corners[i].slope, -10),3,3);
-            g.drawLine(xtest[i], ytest[i], xtest[i+4], ytest[i+4]);
+          //  g.drawLine(xtest[i], ytest[i], xtest[i+4], ytest[i+4]);
         }
 
     //    g.drawString(polyi + " ," + reversed, 200, 40);

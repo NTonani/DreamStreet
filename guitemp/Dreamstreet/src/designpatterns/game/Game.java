@@ -27,7 +27,7 @@ public class Game extends Canvas implements Runnable{
 	private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 	
 	//spritesheets for map and character
-	private SpriteSheet spritesheet = new SpriteSheet("/bear_sheet.png");
+	private SpriteSheet spritesheet = new SpriteSheet("/monsters/skulltula.png");
     private SpriteSheet monstersheet = new SpriteSheet("/monsters/skulltula.png");
     private SpriteSheet lightsheet = new SpriteSheet("/lighttest.png");
 	private SpriteSheet mapsheet = new SpriteSheet("/tile_sheet2.png");
@@ -190,11 +190,11 @@ public class Game extends Canvas implements Runnable{
 		map.yOffSet += dy;
         monster.setX(monster.getX()-dx);
         monster.setY(monster.getY()-dy);
-	/*	for (int i = 0 ; i < rays.length; i++) {
+		for (int i = 0 ; i < rays.length; i++) {
 			rays[i].obstacle.x -= dx;
 			rays[i].obstacle.y -= dy;
 			rays[i].tick(character.getX()+50,character.getY()+25);
-		}*/
+		}
 
 
 		/*
@@ -219,9 +219,9 @@ public class Game extends Canvas implements Runnable{
 	    monster.draw(g,SCALE*2);
 		lightradius.draw(g,30);
 
-		/*for (int i = 0; i < rays.length; i++) {
+		for (int i = 0; i < rays.length; i++) {
 			rays[i].draw(g);
-		}*/
+		}
 		drawDiagnostic(g);
 
 		g.dispose();
