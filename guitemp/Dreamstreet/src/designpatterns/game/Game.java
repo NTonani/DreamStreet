@@ -6,7 +6,7 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 import javax.swing.event.MouseInputListener;
 
 import designpatterns.gfx.*;
@@ -63,11 +63,13 @@ public class Game extends Canvas implements Runnable, MouseInputListener, MouseW
 
 	//map
 	private TileMap map = new TileMap("res/raymaptest.txt",mapsheet);
-    Camera camera;
+    private Camera camera;
 
 
 //	private RayShadow[] rays = new RayShadow[20];
 	int fps = 0;
+
+    private boolean clicked = false;
 
 	public Game() {
         camera = new Camera(3,.1);
@@ -99,17 +101,19 @@ public class Game extends Canvas implements Runnable, MouseInputListener, MouseW
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_W) {
-                    dy = -3;
+                    character.setDy(-3);
                 }
                 if (e.getKeyCode() == KeyEvent.VK_S) {
-                    dy = 3;
+                    character.setDy(3);
+
                 }
 
                 if (e.getKeyCode() == KeyEvent.VK_A) {
-                    dx = -3;
+                    character.setDx(-3);
+
                 }
                 if (e.getKeyCode() == KeyEvent.VK_D) {
-                    dx = 3;
+                    character.setDx(3);
                 }
 
                 camera.setDx(dx);
@@ -118,29 +122,6 @@ public class Game extends Canvas implements Runnable, MouseInputListener, MouseW
 
             public void keyReleased(KeyEvent e) {
 
-                if (e.getKeyCode() == KeyEvent.VK_W) {
-                    if (dy == -3) {
-                        dy = 0;
-                    }
-                }
-                if (e.getKeyCode() == KeyEvent.VK_S) {
-                    if (dy == 3) {
-                        dy = 0;
-                    }
-                }
-
-                if (e.getKeyCode() == KeyEvent.VK_A) {
-                    if (dx == -3) {
-                        dx = 0;
-                    }
-                }
-                if (e.getKeyCode() == KeyEvent.VK_D) {
-                    if (dx == 3) {
-                        dx = 0;
-                    }
-                }
-                camera.setDx(dx);
-                camera.setDy(dy);
             }
 
             public void keyTyped(KeyEvent e) {
@@ -215,8 +196,17 @@ public class Game extends Canvas implements Runnable, MouseInputListener, MouseW
           //  map.xOffset=shittyOffset((int)(960-32*scale*character.imgscale/2), character.getX(),scale);
         //    map.yOffset=shittyOffset((int)(540-32*scale*character.imgscale/2), character.getY(), scale);
     //    }
-        character.setX(character.getX() + dx);
-        character.setY(character.getY() + dy);
+        if (clicked) {
+            Point mLoc = MouseInfo.getPointerInfo().getLocation();
+            Point frameLoc = this.getLocationOnScreen();
+            mLoc.x -= frameLoc.x;
+            mLoc.y -= frameLoc.y;
+            character.move(mLoc.getX() / camera.getScale() + camera.getXOffset(), mLoc.getY() / camera.getScale() + camera.getYOffset());
+
+        }
+        character.tick();
+        camera.centerCamera(character.getX(),character.getY(), 32*character.imgscale / 2, 32*character.imgscale/2);
+
         camera.tick();
 
 
@@ -300,7 +290,9 @@ public class Game extends Canvas implements Runnable, MouseInputListener, MouseW
     @Override
     public void mousePressed(MouseEvent e) {
         if (e.getButton() == MouseEvent.BUTTON1) {
+        //    character.move(e.getX() / camera.getScale() + camera.getXOffset(), e.getY() / camera.getScale() + camera.getYOffset());
 
+            clicked = true;
         }else if (e.getButton() == MouseEvent.BUTTON3) {
 
         }
@@ -308,7 +300,11 @@ public class Game extends Canvas implements Runnable, MouseInputListener, MouseW
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        if (e.getButton() == MouseEvent.BUTTON1) {
+            clicked = false;
+        }else if (e.getButton() == MouseEvent.BUTTON3) {
 
+        }
     }
 
     @Override
@@ -323,6 +319,9 @@ public class Game extends Canvas implements Runnable, MouseInputListener, MouseW
 
     @Override
     public void mouseDragged(MouseEvent e) {
+        if (clicked) {
+          //  character.move(e.getX() / camera.getScale() + camera.getXOffset(), e.getY() / camera.getScale() + camera.getYOffset());
+        }
 
     }
 
