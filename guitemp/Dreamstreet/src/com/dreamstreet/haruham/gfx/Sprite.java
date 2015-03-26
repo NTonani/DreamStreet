@@ -1,4 +1,4 @@
-package designpatterns.gfx;
+package com.dreamstreet.haruham.gfx;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -45,10 +45,12 @@ public class Sprite {
 	}
 
     public void tick() {
-        if ((x > dest_x && dx > 0) || (x < dest_x && dx < 0)) {
+        if ((x + dx > dest_x && dx > 0) || (x + dx < dest_x && dx < 0)) {
             dx = 0;
-            dy = 0;
             x = dest_x;
+        }
+        if ((y + dy > dest_y && dy > 0) || (y + dy < dest_y && dy < 0)) {
+            dy = 0;
             y = dest_y;
         }
    /*     }else if  {
@@ -91,6 +93,7 @@ public class Sprite {
 
     public void setX(double x) {
         this.x = x;
+        dest_x = x;
     }
 
 	public double getY() {
@@ -99,6 +102,7 @@ public class Sprite {
 
 	public void setY(double y) {
 		this.y = y;
+        dest_y = y;
 	}
 
     public double getDy() {
@@ -125,25 +129,17 @@ public class Sprite {
 
         int xdir = 0;
         double slope = 0;
-        if (run == 0 && rise > 0)
-        {
+        if (run == 0 && rise > 0) {
             slope = 2000;
             xdir = 0;
-        }
-        else if (run == 0 && rise < 0)
-        {
+        }else if (run == 0 && rise < 0) {
             slope = -2000;
             xdir = 0;
-        }
-        else if (run != 0)
-        {
+        }else if (run != 0) {
             slope = rise / run;
-            if (run > 0)
-            {
+            if (run > 0) {
                 xdir = 1;
-            }
-            else
-            {
+            }else{
                 xdir = -1;
             }
         }
@@ -161,13 +157,22 @@ public class Sprite {
         this.dest_y = dest_y - (height - 4) * imgscale;
 
         Direction dir = findSlope();
+
         dx = findDX(dir.slope) * dir.xdir;
         dy = dir.slope * dx;
+
 
         if (dir.slope == 2000 || dir.slope == -2000)
         {
             dy = velocity * dir.slope / Math.abs(dir.slope);
         }
+    }
+
+    public void stop() {
+        dest_x = x;
+        dest_y = y;
+        dx = 0;
+        dy = 0;
     }
 
 	

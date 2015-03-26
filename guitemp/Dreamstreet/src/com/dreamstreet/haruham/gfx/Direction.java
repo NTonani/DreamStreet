@@ -1,4 +1,4 @@
-package designpatterns.gfx;
+package com.dreamstreet.haruham.gfx;
 
 /**
  * Created by Leland on 3/23/2015.

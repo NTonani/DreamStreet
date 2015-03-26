@@ -1,17 +1,14 @@
-package designpatterns.gfx;
+package com.dreamstreet.haruham.gfx;
 
-import designpatterns.game.Game;
+import com.dreamstreet.haruham.Game;
 
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 public class TileMap {

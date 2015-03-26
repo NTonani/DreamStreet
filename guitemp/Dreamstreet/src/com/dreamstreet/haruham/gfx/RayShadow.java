@@ -1,7 +1,6 @@
-package designpatterns.gfx;
+package com.dreamstreet.haruham.gfx;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 /**
  * Created by Leland on 2/25/2015.
