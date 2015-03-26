@@ -1,6 +1,6 @@
-package designpatterns.gfx;
+package com.dreamstreet.haruham.gfx;
 
-import designpatterns.game.Game;
+import com.dreamstreet.haruham.Game;
 
 /**
  * Created by Leland on 3/22/2015.
@@ -21,7 +21,6 @@ public class Camera {
 
     private double scale;
     private double zoom;
-    private double zoompercent;
 
     public Camera(double scale, double zoom) {
         SCREEN_CENTER_X = Game.WIDTH * Game.SCALE / 2;
@@ -55,7 +54,6 @@ public class Camera {
     public void tick() {
         xOffset += dx;
         yOffset += dy;
-
     }
 
     public void centerCamera(double x, double y, double width, double height) {
@@ -74,10 +72,10 @@ public class Camera {
     public void setDy(double dy) {
         this.dy = dy;
     }
-
     public void setDx(double dx) {
         this.dx = dx;
     }
+
     public double getScale() {
         return scale;
     }

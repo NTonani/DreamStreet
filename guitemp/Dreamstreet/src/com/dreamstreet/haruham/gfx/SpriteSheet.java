@@ -1,4 +1,4 @@
-package designpatterns.gfx;
+package com.dreamstreet.haruham.gfx;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
